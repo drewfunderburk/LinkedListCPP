@@ -15,7 +15,7 @@ public:
 template<typename T>
 inline Node<T>::Node()
 {
-	data = nullptr;
+	data = NULL;
 }
 
 template<typename T>

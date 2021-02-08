@@ -27,16 +27,16 @@ public:
 	const List<T>& operator=(const List<T>& other);
 
 private:
-	Node<T> m_head;
-	Node<T> m_tail;
+	Node<T>* m_head;
+	Node<T>* m_tail;
 	int m_nodeCount;
 };
 
 template<typename T>
 inline List<T>::List()
 {
-	m_head = nullptr;
-	m_tail = nullptr;
+	m_head = new Node<T>();
+	m_tail = m_head;
 	m_nodeCount = 0;
 }
 
@@ -67,8 +67,8 @@ inline void List<T>::destroy()
 			iter++;
 	}
 	// TODO: Test if m_head and m_tail are deallocated
-	m_head = nullptr;
-	m_tail = nullptr;
+	m_head = new Node<T>();
+	m_tail = m_head;
 	m_nodeCount = 0;
 }
 
@@ -103,10 +103,22 @@ template<typename T>
 inline void List<T>::pushFront(const T& value)
 {
 	// TODO: Test
+
+	// Create new node with given data
 	Node<T>* node = new Node<T>(value);
+	
+	// Attach this node before m_head
 	node->next = m_head;
-	m_head.previous = node;
+	m_head->previous = node;
+
+	// If m_tail has no data, push m_head into it
+	if (m_tail->data == NULL)
+		m_tail = m_head;
+
+	// Make this node the new head
 	m_head = node;
+
+	// Increment m_nodeCount
 	m_nodeCount++;
 }
 
@@ -114,10 +126,18 @@ template<typename T>
 inline void List<T>::pushBack(const T& value)
 {
 	// TODO: Test
+
+	// Create new node with given data
 	Node<T>* node = new Node<T>(value);
+
+	// Attach this node after m_tail
 	node->previous = m_tail;
 	m_tail->next = node;
+
+	// Make this node the new tail
 	m_tail = node;
+
+	// Increment m_nodeCount
 	m_nodeCount++;
 }
 
