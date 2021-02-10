@@ -49,7 +49,10 @@ inline List<T>::List(List<T>&)
 template<typename T>
 inline List<T>::~List()
 {
-	// TODO: Implement
+	// TODO: Test
+	destroy();
+	delete m_head;
+	delete m_tail;
 }
 
 template<typename T>
@@ -134,6 +137,10 @@ inline void List<T>::pushBack(const T& value)
 	node->previous = m_tail;
 	m_tail->next = node;
 
+	// If m_head has no data, push m_tail into it
+	if (m_tail->data == NULL)
+		m_head = m_tail;
+
 	// Make this node the new tail
 	m_tail = node;
 
@@ -145,26 +152,38 @@ template<typename T>
 inline bool List<T>::insert(const T& value, int index)
 {
 	// TODO: Implement
-	if (index >= m_nodeCount)
+	if (index >= m_nodeCount || index < 0)
 		return false;
 
-	Iterator<T> iter = Iterator<T>(m_head);
+	// Create node pointer to hold new value
+	Node<T>* node = new Node<T>(value);
+
+	// Declare a placeholder node pointer
+	Node<T>* indexNode = m_head;
+	// Get the node at the given index
 	for (int i = 0; i < index; i++)
-		iter++;
+	{
+		indexNode = indexNode->next;
+	}
+	
+	// Ensure node->next exists and link them up
+	if (indexNode->next)
+	{
+		indexNode->next->previous = node;
+		node->next = indexNode->next;
+	}
+	indexNode->next = node;
+	node->previous = indexNode;
 
-	if (!iter.m_current)
-		return false;
-
-	if (iter.m_current->next)
-		iter.m_current->next->previous = value;
-	iter.m_current->next = value;
 	m_nodeCount++;
+	return true;
 }
 
 template<typename T>
 inline bool List<T>::remove(const T& value)
 {
 	// TODO: Implement
+
 	return false;
 }
 

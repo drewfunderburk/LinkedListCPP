@@ -9,12 +9,11 @@ public:
 	Iterator(Node<T>* node);
 
 	Iterator<T> operator++(T);
-	Iterator<T> operator--();
+	Iterator<T> operator--(T);
 	Iterator<T> operator==(const Iterator<T>& iter);
 	const bool operator!=(const Iterator<T>& iter);
 	T operator*();
 
-	T getData();
 private:
 	Node<T>* m_current;
 };
@@ -39,7 +38,7 @@ inline Iterator<T> Iterator<T>::operator++(T)
 }
 
 template<typename T>
-inline Iterator<T> Iterator<T>::operator--()
+inline Iterator<T> Iterator<T>::operator--(T)
 {
 	m_current = m_current->previous;
 	return *this;
@@ -62,12 +61,6 @@ inline const bool Iterator<T>::operator!=(const Iterator<T>& iter)
 template<typename T>
 inline T Iterator<T>::operator*()
 {
-	// TODO: Implement
-	return T();
-}
-
-template<typename T>
-inline T Iterator<T>::getData()
-{
+	// TODO: Test
 	return m_current->data;
 }
