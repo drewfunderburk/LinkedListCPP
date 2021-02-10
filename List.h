@@ -7,11 +7,11 @@ class List
 {
 public:
 	List();
-	List(List<T>&);
+	List(const List<T>& other);
 	~List();
 	void destroy();
-	Iterator<T> begin();
-	Iterator<T> end();
+	Iterator<T> begin() const;
+	Iterator<T> end() const;
 	bool contains(const T& object);
 	void pushFront(const T& value);
 	void pushBack(const T& value);
@@ -35,15 +35,18 @@ private:
 template<typename T>
 inline List<T>::List()
 {
-	m_head = new Node<T>();
-	m_tail = m_head;
-	m_nodeCount = 0;
+	initialize();
 }
 
 template<typename T>
-inline List<T>::List(List<T>&)
+inline List<T>::List(const List<T>& other)
 {
-	// TODO: Implement
+	destroy();
+	initialize();
+	for (Iterator<T> iter = other.begin(); iter != other.end(); iter++)
+	{
+		pushFront(*iter);
+	}
 }
 
 template<typename T>
@@ -59,34 +62,39 @@ template<typename T>
 inline void List<T>::destroy()
 {
 	// TODO: Test
-	Iterator<T> iter = Iterator<T>(m_head);
-	for (int i = 0; i < m_nodeCount; i++)
+	Node<T>* node = m_tail;
+	for (int i = getLength(); i > 0; i--)
 	{
-		if (iter.m_current->previous)
-			delete iter.m_current->previous;
-		if (!iter.m_current->next)
-			delete iter.m_current;
-		if (iter.m_current != m_tail)
-			iter++;
+		if (node->previous)
+		{
+			node = node->previous;
+			delete node->next;
+			node->next = nullptr;
+		}
+		else
+		{
+			delete node;
+			node = nullptr;
+		}
 	}
+	delete m_head;
+	m_head = nullptr;
+	m_tail = nullptr;
+
 	// TODO: Test if m_head and m_tail are deallocated
-	m_head = new Node<T>();
-	m_tail = m_head;
-	m_nodeCount = 0;
+	initialize();
 }
 
 template<typename T>
-inline Iterator<T> List<T>::begin()
+inline Iterator<T> List<T>::begin() const
 {
-	// TODO: Test
 	return Iterator<T>(m_head);
 }
 
 template<typename T>
-inline Iterator<T> List<T>::end()
+inline Iterator<T> List<T>::end() const
 {
-	// TODO: Test
-	return Iterator<T>(m_tail);
+	return Iterator<T>(m_tail->next);
 }
 
 template<typename T>
@@ -96,7 +104,7 @@ inline bool List<T>::contains(const T& object)
 	Iterator<T> iter = Iterator<T>(m_head);
 	for (int i = 0; i < m_nodeCount; i++)
 	{
-		if (&iter.m_current == object)
+		if (*iter == object)
 			return true;
 	}
 	return false;
@@ -110,13 +118,17 @@ inline void List<T>::pushFront(const T& value)
 	// Create new node with given data
 	Node<T>* node = new Node<T>(value);
 	
+	// If there are no nodes, set the tail to this node
+	if (isEmpty())
+	{
+		m_tail->data = value;
+		m_nodeCount++;
+		return;
+	}
+
 	// Attach this node before m_head
 	node->next = m_head;
 	m_head->previous = node;
-
-	// If m_tail has no data, push m_head into it
-	if (m_tail->data == NULL)
-		m_tail = m_head;
 
 	// Make this node the new head
 	m_head = node;
@@ -132,6 +144,14 @@ inline void List<T>::pushBack(const T& value)
 
 	// Create new node with given data
 	Node<T>* node = new Node<T>(value);
+
+	// If there are no nodes, set the tail to this node
+	if (isEmpty())
+	{
+		m_tail->data = value;
+		m_nodeCount++;
+		return;
+	}
 
 	// Attach this node after m_tail
 	node->previous = m_tail;
@@ -151,7 +171,9 @@ inline void List<T>::pushBack(const T& value)
 template<typename T>
 inline bool List<T>::insert(const T& value, int index)
 {
-	// TODO: Implement
+	// TODO: Test
+
+	// Ensure valid index
 	if (index >= m_nodeCount || index < 0)
 		return false;
 
@@ -166,14 +188,11 @@ inline bool List<T>::insert(const T& value, int index)
 		indexNode = indexNode->next;
 	}
 	
-	// Ensure node->next exists and link them up
-	if (indexNode->next)
-	{
-		indexNode->next->previous = node;
-		node->next = indexNode->next;
-	}
-	indexNode->next = node;
-	node->previous = indexNode;
+	// Insert node before
+	indexNode->previous->next = node;
+	node->previous = indexNode->previous;
+	node->next = indexNode;
+	indexNode->previous = node;
 
 	m_nodeCount++;
 	return true;
@@ -182,32 +201,53 @@ inline bool List<T>::insert(const T& value, int index)
 template<typename T>
 inline bool List<T>::remove(const T& value)
 {
-	// TODO: Implement
+	// Create placeholder node pointer and point it at m_head
+	Node<T>* placeholder = m_head;
 
+	// Go through nodes without an Iterator since we need access to the nodes themselves
+	for (int i = 0; i < getLength(); i++)
+	{
+		// If the current node has the given value
+		if (placeholder->data == value)
+		{
+			// Unlink node
+			placeholder->previous->next = placeholder->next;
+			placeholder->next->previous = placeholder->previous;
+
+			// Delete node
+			delete placeholder;
+			m_nodeCount--;
+			return true;
+		}
+		
+		// Go to next node
+		placeholder = placeholder->next;
+	}
 	return false;
 }
 
 template<typename T>
 inline void List<T>::print() const
 {
-	// TODO: Implement
-	return void();
+	for (Iterator<T> iter = begin(); iter != end(); iter++)
+		std::cout << *iter << std::endl;
 }
 
 template<typename T>
 inline void List<T>::initialize()
 {
-	// TODO: Implement
+	// TODO: Test
+	m_head = new Node<T>();
+	m_tail = new Node<T>();
+	m_head->next = m_tail;
+	m_tail->previous = m_head;
+	m_nodeCount = 0;
 }
 
 template<typename T>
 inline bool List<T>::isEmpty() const
 {
-	// TODO: Test
-	if (m_nodeCount == 0)
-		return true;
-	else
-		return false;
+	return m_nodeCount == 0;
 }
 
 template<typename T>
@@ -228,10 +268,36 @@ template<typename T>
 inline void List<T>::sort()
 {
 	// TODO: Implement
+
+	for (int i = 0; i < getLength(); i++)
+	{
+		// Store pointer to m_head
+		Node<T>* node = m_head;
+
+		for (int j = 0; j < getLength(); j++)
+		{
+			// Check if this node is greater than the last node
+			if (node->data > node->next->data)
+			{
+				// Swap node with node->next
+				T temp = node->data;
+				node->data = node->next->data;
+				node->next->data = temp;
+			}
+
+			// Go to the next node
+			node = node->next;
+		}
+	}
 }
 
 template<typename T>
 inline const List<T>& List<T>::operator=(const List<T>& other)
 {
-	// TODO: insert return statement here
+	destroy();
+	initialize();
+	for (Iterator<T> iter = other.begin(); iter != other.end(); iter++)
+	{
+		pushFront(*iter);
+	}
 }
