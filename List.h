@@ -61,25 +61,13 @@ inline List<T>::~List()
 template<typename T>
 inline void List<T>::destroy()
 {
-	// TODO: Test
-	Node<T>* node = m_tail;
-	for (int i = getLength(); i > 0; i--)
+	// Iterate through list and destroy all nodes
+	for ( Node<T>*iter = m_head; iter != m_tail->next;)
 	{
-		if (node->previous)
-		{
-			node = node->previous;
-			delete node->next;
-			node->next = nullptr;
-		}
-		else
-		{
-			delete node;
-			node = nullptr;
-		}
+		Node<T>* temp = iter;
+		iter = iter->next;
+		delete temp;
 	}
-	delete m_head;
-	m_head = nullptr;
-	m_tail = nullptr;
 
 	// TODO: Test if m_head and m_tail are deallocated
 	initialize();
