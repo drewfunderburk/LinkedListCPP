@@ -24,7 +24,13 @@ int main()
 
 	list = list2;
 
+	List<int> list3;
+	list = list3;
 
+	List<int> list4;
+	list4 = list;
+
+	system("pause");
 	/*
 	using namespace std::chrono;
 	auto lastTime = system_clock::now();

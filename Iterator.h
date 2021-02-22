@@ -55,7 +55,7 @@ inline const bool Iterator<T>::operator==(const Iterator<T>& iter)
 		else
 			return false;
 	}
-	return m_current->data == iter.m_current->data;
+	return m_current == iter.m_current;
 }
 
 template<typename T>
@@ -70,7 +70,7 @@ inline const bool Iterator<T>::operator!=(const Iterator<T>& iter)
 			return true;
 	}
 
-	return m_current->data != iter.m_current->data;
+	return m_current != iter.m_current;
 }
 
 template<typename T>
