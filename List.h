@@ -300,4 +300,6 @@ inline const List<T>& List<T>::operator=(const List<T>& other)
 	{
 		pushFront(*iter);
 	}
+
+	return *this;
 }

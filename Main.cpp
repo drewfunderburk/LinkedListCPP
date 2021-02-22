@@ -22,6 +22,8 @@ int main()
 	std::cout << std::endl;
 	list2.print();
 
+	list = list2;
+
 
 	/*
 	using namespace std::chrono;
