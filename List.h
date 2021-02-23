@@ -41,10 +41,13 @@ inline List<T>::List()
 template<typename T>
 inline List<T>::List(const List<T>& other)
 {
+	// Delete all nodes
 	destroy();
+	// Initialize new list
 	initialize();
 	for (Iterator<T> iter = other.begin(); iter != other.end(); iter++)
 	{
+		// Deep copy
 		pushFront(*iter);
 	}
 }
@@ -52,7 +55,6 @@ inline List<T>::List(const List<T>& other)
 template<typename T>
 inline List<T>::~List()
 {
-	// TODO: Test
 	destroy();
 	delete m_head;
 	delete m_tail;
@@ -69,7 +71,7 @@ inline void List<T>::destroy()
 		delete temp;
 	}
 
-	// TODO: Test if m_head and m_tail are deallocated
+	// Initialize new list
 	initialize();
 }
 
@@ -88,9 +90,8 @@ inline Iterator<T> List<T>::end() const
 template<typename T>
 inline bool List<T>::contains(const T& object)
 {
-	// TODO: Test
-	Iterator<T> iter = Iterator<T>(m_head);
-	for (int i = 0; i < m_nodeCount; i++)
+	// Return true if the value of object is found in the list
+	for (Iterator<T> iter = Iterator<T>(m_head); iter != end(); iter++)
 	{
 		if (*iter == object)
 			return true;
@@ -101,8 +102,6 @@ inline bool List<T>::contains(const T& object)
 template<typename T>
 inline void List<T>::pushFront(const T& value)
 {
-	// TODO: Test
-
 	// Create new node with given data
 	Node<T>* node = new Node<T>(value);
 	
@@ -128,8 +127,6 @@ inline void List<T>::pushFront(const T& value)
 template<typename T>
 inline void List<T>::pushBack(const T& value)
 {
-	// TODO: Test
-
 	// Create new node with given data
 	Node<T>* node = new Node<T>(value);
 
@@ -159,8 +156,6 @@ inline void List<T>::pushBack(const T& value)
 template<typename T>
 inline bool List<T>::insert(const T& value, int index)
 {
-	// TODO: Test
-
 	// Ensure valid index
 	if (index >= m_nodeCount || index < 0)
 		return false;
@@ -224,9 +219,10 @@ inline void List<T>::print() const
 template<typename T>
 inline void List<T>::initialize()
 {
-	// TODO: Test
+	// Create nodes for head and tail
 	m_head = new Node<T>();
 	m_tail = new Node<T>();
+	// Link them up
 	m_head->next = m_tail;
 	m_tail->previous = m_head;
 	m_nodeCount = 0;
@@ -241,22 +237,29 @@ inline bool List<T>::isEmpty() const
 template<typename T>
 inline bool List<T>::getData(Iterator<T>& iter, int index)
 {
-	// TODO: Implement
+	// Set the iterator to the beginning of the list
+	iter = begin();
+	for (int i = 0; i < index; i++)
+	{
+		// Increment the iterator up to index
+		iter++;
+	}
+
+	// Return false if iter is null
+	if (iter != nullptr)
+		return true;
 	return false;
 }
 
 template<typename T>
 inline int List<T>::getLength() const
 {
-	// TODO: Test
 	return m_nodeCount;
 }
 
 template<typename T>
 inline void List<T>::sort()
 {
-	// TODO: Implement
-
 	for (int i = 0; i < getLength(); i++)
 	{
 		// Store pointer to m_head
@@ -267,7 +270,7 @@ inline void List<T>::sort()
 			// Check if this node is greater than the last node
 			if (node->data > node->next->data)
 			{
-				// Swap node with node->next
+				// Swap data in node with node->next
 				T temp = node->data;
 				node->data = node->next->data;
 				node->next->data = temp;
@@ -282,10 +285,13 @@ inline void List<T>::sort()
 template<typename T>
 inline const List<T>& List<T>::operator=(const List<T>& other)
 {
+	// Delete all nodes
 	destroy();
+	// Initialize a new list
 	initialize();
 	for (Iterator<T> iter = other.begin(); iter != other.end(); iter++)
 	{
+		// Deep copy
 		pushFront(*iter);
 	}
 
