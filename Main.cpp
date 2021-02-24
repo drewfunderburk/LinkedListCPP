@@ -11,7 +11,11 @@ int main()
 	list.pushFront(4);
 	list.pushFront(20);
 	list.pushFront(2);
-	
+	list.pushBack(15);
+
+	std::cout << list.contains(5) << std::endl;
+	std::cout << std::endl;
+
 	Iterator<int> iter;
 	list.getData(iter, 2);
 	std::cout << *iter << std::endl;

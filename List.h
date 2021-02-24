@@ -149,10 +149,8 @@ inline Iterator<T> List<T>::end() const
 template<typename T>
 inline bool List<T>::contains(const T& object)
 {
-	Iterator<T> iter = Iterator<T>(m_head);
-
 	// Check each node for the given value
-	for (int i = 0; i < m_nodeCount; i++)
+	for (Iterator<T> iter = begin(); iter != end(); iter++)
 	{
 		if (*iter == object)
 			return true;
@@ -162,10 +160,7 @@ inline bool List<T>::contains(const T& object)
 
 template<typename T>
 inline void List<T>::pushFront(const T& value)
-{
-	// Create new node with given data
-	Node<T>* node = new Node<T>(value);
-	
+{	
 	// If there are no nodes, set the tail to this node
 	if (isEmpty())
 	{
@@ -173,6 +168,17 @@ inline void List<T>::pushFront(const T& value)
 		m_nodeCount++;
 		return;
 	}
+
+	// If there is only one node (meaning only m_tail has a value) set m_head to be the given value
+	if (m_nodeCount == 1)
+	{
+		m_head->data = value;
+		m_nodeCount++;
+		return;
+	}
+
+	// Create new node with given data
+	Node<T>* node = new Node<T>(value);
 
 	// Attach this node before m_head
 	node->next = m_head;
@@ -188,9 +194,6 @@ inline void List<T>::pushFront(const T& value)
 template<typename T>
 inline void List<T>::pushBack(const T& value)
 {
-	// Create new node with given data
-	Node<T>* node = new Node<T>(value);
-
 	// If there are no nodes, set the tail to this node
 	if (isEmpty())
 	{
@@ -198,6 +201,19 @@ inline void List<T>::pushBack(const T& value)
 		m_nodeCount++;
 		return;
 	}
+
+	// If there is only one node (meaning only m_tail has a value)
+	// move m_tail's value to m_head and add value to m_tail
+	if (m_nodeCount == 1)
+	{
+		m_head->data = m_tail->data;
+		m_tail->data = value;
+		m_nodeCount++;
+		return;
+	}
+
+	// Create new node with given data
+	Node<T>* node = new Node<T>(value);
 
 	// Attach this node after m_tail
 	node->previous = m_tail;
