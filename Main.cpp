@@ -11,6 +11,10 @@ int main()
 	list.pushFront(4);
 	list.pushFront(20);
 	list.pushFront(2);
+	
+	Iterator<int> iter;
+	list.getData(iter, 2);
+	std::cout << *iter << std::endl;
 
 	List<int> list2 = list;
 
@@ -20,18 +24,10 @@ int main()
 	list2.remove(4);
 
 	std::cout << std::endl;
-	list2.print();
-
-	list = list2;
-
-	List<int> list3;
-	list = list3;
-
-	List<int> list4;
-	list4 = list;
-
+	list.print();
+	
 	system("pause");
-	/*
+	
 	using namespace std::chrono;
 	auto lastTime = system_clock::now();
 
@@ -41,13 +37,13 @@ int main()
 		{
 			for (int i = 0; i < 10; i++)
 			{
-				list->pushFront(i);
+				list.pushFront(i);
 			}
-			list->print();
-			list->destroy();
+			//list.print();
+			list.destroy();
 			lastTime = system_clock::now();
 		}
 	}
-	*/
+	
 	return 0;
 }

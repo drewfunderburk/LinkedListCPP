@@ -47,7 +47,6 @@ inline Iterator<T> Iterator<T>::operator--(T)
 template<typename T>
 inline const bool Iterator<T>::operator==(const Iterator<T>& iter)
 {
-	// TODO: Test
 	if (iter.m_current == nullptr)
 	{
 		if (m_current == nullptr)
@@ -61,7 +60,6 @@ inline const bool Iterator<T>::operator==(const Iterator<T>& iter)
 template<typename T>
 inline const bool Iterator<T>::operator!=(const Iterator<T>& iter)
 {
-	// TODO: Test
 	if (iter.m_current == nullptr)
 	{
 		if (m_current == nullptr)
@@ -76,6 +74,5 @@ inline const bool Iterator<T>::operator!=(const Iterator<T>& iter)
 template<typename T>
 inline T Iterator<T>::operator*()
 {
-	// TODO: Test
 	return m_current->data;
 }
