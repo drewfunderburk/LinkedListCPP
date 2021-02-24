@@ -106,7 +106,7 @@ inline List<T>::List(const List<T>& other)
 	for (Iterator<T> iter = other.begin(); iter != other.end(); iter++)
 	{
 		// Deep copy
-		pushFront(*iter);
+		pushBack(*iter);
 	}
 }
 
@@ -372,7 +372,7 @@ inline const List<T>& List<T>::operator=(const List<T>& other)
 	for (Iterator<T> iter = other.begin(); iter != other.end(); iter++)
 	{
 		// Deep copy
-		pushFront(*iter);
+		pushBack(*iter);
 	}
 
 	return *this;

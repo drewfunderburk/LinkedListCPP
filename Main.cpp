@@ -14,7 +14,7 @@ int main()
 	list.pushFront(2);
 	list.pushBack(15);
 
-	std::cout << list.contains(5) << std::endl;
+	std::cout << list.contains(4) << std::endl;
 	std::cout << std::endl;
 
 	Iterator<int> iter;
