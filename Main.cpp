@@ -6,6 +6,7 @@ int main()
 {
 	List<int> list = List<int>();
 
+	// Demonstrate push
 	list.pushFront(1);
 	list.pushFront(7);
 	list.pushFront(4);

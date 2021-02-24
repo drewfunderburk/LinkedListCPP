@@ -105,6 +105,7 @@ inline List<T>::List(const List<T>& other)
 	// Push all node values from the other list into this one
 	for (Iterator<T> iter = other.begin(); iter != other.end(); iter++)
 	{
+		// Deep copy
 		pushFront(*iter);
 	}
 }
@@ -233,8 +234,6 @@ inline void List<T>::pushBack(const T& value)
 template<typename T>
 inline bool List<T>::insert(const T& value, int index)
 {
-	// TODO: Test
-
 	// Ensure valid index
 	if (index >= m_nodeCount || index < 0)
 		return false;
@@ -301,6 +300,7 @@ inline void List<T>::initialize()
 	// Create head and tail and link them together
 	m_head = new Node<T>();
 	m_tail = new Node<T>();
+	// Link them up
 	m_head->next = m_tail;
 	m_tail->previous = m_head;
 	m_nodeCount = 0;
@@ -315,16 +315,18 @@ inline bool List<T>::isEmpty() const
 template<typename T>
 inline bool List<T>::getData(Iterator<T>& iter, int index)
 {
-	// TODO: Test
-
-	// Create an iterator at the beginning of the list
-	Iterator<T> iterator = begin();
-	// Increment it to index
+	// Set the iterator to the beginning of the list
+	iter = begin();
 	for (int i = 0; i < index; i++)
-		iterator++;
-	// Assign it to iter
-	iter = iterator;
-	return true;
+	{
+		// Increment the iterator up to index
+		iter++;
+	}
+
+	// Return false if iter is null
+	if (iter != nullptr)
+		return true;
+	return false;
 }
 
 template<typename T>
@@ -346,7 +348,7 @@ inline void List<T>::sort()
 			// Check if this node is greater than the last node
 			if (node->data > node->next->data)
 			{
-				// Swap node with node->next
+				// Swap data in node with node->next
 				T temp = node->data;
 				node->data = node->next->data;
 				node->next->data = temp;
@@ -369,6 +371,7 @@ inline const List<T>& List<T>::operator=(const List<T>& other)
 	// Push the values from the other list into this one
 	for (Iterator<T> iter = other.begin(); iter != other.end(); iter++)
 	{
+		// Deep copy
 		pushFront(*iter);
 	}
 
